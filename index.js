@@ -1,7 +1,10 @@
 const inquirer = require('inquirer');
+const fs = require("fs");
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
+const generatePage = require("./src/page-template.js");
+var employees = [];
 function buildManager(){
     console.log("Please build your team");
     inquirer.prompt([
@@ -59,7 +62,7 @@ function buildManager(){
         }
     ])
     .then(managerData => {
-        console.log(managerData);
+        employees.push(new Manager (managerData.name, managerData.id, managerData.email, managerData.office));
     })
     .then(chooseAction);
 }
@@ -80,7 +83,7 @@ function chooseAction() {
         } else if (action === "Add an intern"){
             buildEmployee("intern")
         } else if (action === "Finish building my team"){
-            console.log("reached finish");
+            buildPage();
         }
     })
 }
@@ -101,7 +104,7 @@ function buildEmployee(role){
       },
       {
         type: "text",
-        name: "ID",
+        name: "id",
         message: `Enter ${role}'s ID: `,
         validate: (input) => {
           if (input) {
@@ -145,6 +148,7 @@ function buildEmployee(role){
             ])
             .then(github => {
                 employeeData = {...employeeData,...github};
+                employees.push(new Engineer (employeeData.name, employeeData.id, employeeData.email, employeeData.github));
             })
             .then(chooseAction);
         }
@@ -167,9 +171,36 @@ function buildEmployee(role){
               ])
               .then((school) => {
                 employeeData = { ...employeeData, ...school };
+                employees.push(new Intern (employeeData.name, employeeData.id, employeeData.email, employeeData.school));
               })
               .then(chooseAction);
         }
     })
 }
+function writeToFile(data){
+    return new Promise((resolve, reject) => {
+        fs.writeFile('./dist/team.html', data, err => {
+            if (err){
+                reject(err);
+                return;
+            }
+            resolve({
+                ok: true,
+                message: "File Created!"
+            })
+        })
+    })
+}
 buildManager();
+function buildPage(){
+    page = generatePage()
+    writeToFile(page);
+}
+// .then(employees => {
+//      console.log(employees);
+//     // return generatePage(employees);
+// })
+// .then(writeToFile)
+// .catch(err => {
+//     console.log(err);
+// });
