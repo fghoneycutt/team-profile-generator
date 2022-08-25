@@ -193,14 +193,6 @@ function writeToFile(data){
 }
 buildManager();
 function buildPage(){
-    page = generatePage()
+    page = generatePage(employees);
     writeToFile(page);
 }
-// .then(employees => {
-//      console.log(employees);
-//     // return generatePage(employees);
-// })
-// .then(writeToFile)
-// .catch(err => {
-//     console.log(err);
-// });
