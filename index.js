@@ -1,10 +1,13 @@
 const inquirer = require('inquirer');
 const fs = require("fs");
+//employee functions
 const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const generatePage = require("./src/page-template.js");
+//empty array to hold entered employee info
 var employees = [];
+//build the manager first, as that will come first every time the application is run
 function buildManager(){
     console.log("Please build your team");
     inquirer.prompt([
@@ -61,6 +64,7 @@ function buildManager(){
             },
         }
     ])
+    //create a new manager in the employees array, then choose next action
     .then(managerData => {
         employees.push(new Manager (managerData.name, managerData.id, managerData.email, managerData.office));
     })
@@ -88,6 +92,7 @@ function chooseAction() {
     })
 }
 function buildEmployee(role){
+    //questions applicable to both types of employee
     inquirer.prompt([
       {
         type: "text",
@@ -129,6 +134,7 @@ function buildEmployee(role){
         },
       },
     ])
+    //role-specific questions depending on type of employee chosen
     .then(employeeData => {
         if (role === "engineer"){
             inquirer.prompt([
@@ -177,6 +183,7 @@ function buildEmployee(role){
         }
     })
 }
+//create html file with entered data
 function writeToFile(data){
     return new Promise((resolve, reject) => {
         fs.writeFile('./dist/team.html', data, err => {
@@ -191,6 +198,7 @@ function writeToFile(data){
         })
     })
 }
+//initialize app
 buildManager();
 function buildPage(){
     page = generatePage(employees);

@@ -1,6 +1,26 @@
+*{
+    background-color: #212121;
+    color: white;
+}
 main {
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 .card{
     margin: 10px;
+    border: solid 3px white;
+}
+header{
+    text-align: center;
+    font-size: xx-large;
+}
+.mb-2{
+    margin-bottom: 0px !important;
+}
+h4{
+    background-color: #3264a8;
+    margin: 0px;
+    padding: 10px;
+    display:inline-flex;
 }

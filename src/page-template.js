@@ -1,17 +1,17 @@
+//generate a card element for each employee entered, return to loopThroughData
 function generateEmployee(templateData){
   // Method to get last key and value in an object found here - https://bobbyhadz.com/blog/javascript-get-last-item-in-object#:~:text=To%20get%20the%20last%20item,keys(obj).
   const lastKey = Object.keys(templateData).pop();
   const lastValue = Object.values(templateData).pop();
-  console.log(lastKey, lastValue);
   return `
     <div class="card" style="width: 18rem;">
         <div class="card-body">
             <h4 class="card-title">${templateData.name}</h4>
             <h4 class="card-subtitle mb-2">${templateData.constructor.name}</h4>
-            <h5 class="card-subtitle mb-2 text-muted">ID: ${
+            <h5 class="card-subtitle mb-2">ID: ${
               templateData.id
             }</h5>
-            <h5 class="card-subtitle mb-2 text-muted">Email: <a href ="mailto:${
+            <h5 class="card-subtitle mb-2">Email: <a href ="mailto:${
               templateData.email
             }" class="card-link" target="_blank">${templateData.email}</a></h5>
             <h5>${roleSpecific(
@@ -21,17 +21,20 @@ function generateEmployee(templateData){
         </div>
     </div>`;
 };
+//able to return card template for each employee entered
 function loopThroughData(templateData){
     var cards = [];
     for (var i = 0; i < templateData.length; i++){
         var card = generateEmployee(templateData[i]);
         cards.push(card);
     }
+    //remove comma between elements before returning HTML template
     cards = cards.join();
     cards = cards.replace(/,/g, '');
     return cards;
 
 }
+//add role specific information to the end of each card
 function roleSpecific(role, value){
     if (role === "Manager"){
         return("Office number: " + value);
@@ -43,6 +46,7 @@ function roleSpecific(role, value){
         return("School: " + value);
     }
 }
+// main HTML template
 module.exports = templateData => {
     return `<!DOCTYPE html>
     <html lang="en">
